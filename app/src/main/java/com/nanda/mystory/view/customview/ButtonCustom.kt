@@ -1,13 +1,11 @@
 package com.nanda.mystory.view.customview
 
-import android.util.AttributeSet
-import com.nanda.mystory.R
-import android.graphics.Canvas
 import android.content.Context
-import androidx.core.content.ContextCompat
-import androidx.appcompat.widget.AppCompatButton
 import android.graphics.drawable.Drawable
-
+import android.util.AttributeSet
+import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.ContextCompat
+import com.nanda.mystory.R
 
 class ButtonCustom : AppCompatButton {
 

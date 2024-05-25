@@ -1,18 +1,18 @@
 package com.nanda.mystory.utils
 
+import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import kotlinx.coroutines.flow.Flow
-import com.nanda.mystory.data.model.DataModel
 import androidx.datastore.preferences.preferencesDataStore
-import android.content.Context
+import com.nanda.mystory.data.model.DataModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth_prefs")
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth")
 
 class AuthPreference private constructor(
     private val dataStore: DataStore<Preferences>
@@ -20,19 +20,21 @@ class AuthPreference private constructor(
     fun getData(): Flow<DataModel> {
         return dataStore.data.map { preferences ->
             DataModel(
-                preferences[KEY_NAME] ?: "",
-                preferences[KEY_TOKEN] ?: "",
-                preferences[KEY_IS_LOGIN] ?: false
+                preferences[NAME] ?: "",
+                preferences[TOKEN] ?: "",
+                preferences[IS_LOGIN] ?: false
             )
         }
     }
+
     suspend fun saveData(dataModel: DataModel) {
         dataStore.edit { preferences ->
-            preferences[KEY_NAME] = dataModel.name
-            preferences[KEY_TOKEN] = dataModel.token
-            preferences[KEY_IS_LOGIN] = true
+            preferences[NAME] = dataModel.name
+            preferences[TOKEN] = dataModel.token
+            preferences[IS_LOGIN] = true
         }
     }
+
 
 
     suspend fun logout() {
@@ -45,9 +47,9 @@ class AuthPreference private constructor(
         @Volatile
         private var INSTANCE: AuthPreference? = null
 
-        private val KEY_NAME = stringPreferencesKey("Username")
-        private val KEY_TOKEN = stringPreferencesKey("KeyToken")
-        private val KEY_IS_LOGIN = booleanPreferencesKey("Login")
+        private val NAME = stringPreferencesKey("Username")
+        private val TOKEN = stringPreferencesKey("KeyToken")
+        private val IS_LOGIN = booleanPreferencesKey("Login")
 
         fun getInstance(dataStore: DataStore<Preferences>): AuthPreference {
             return INSTANCE ?: synchronized(this) {
@@ -57,5 +59,7 @@ class AuthPreference private constructor(
             }
         }
     }
-
 }
+
+
+

@@ -1,69 +1,83 @@
 package com.nanda.mystory.view.adapter
 
-import androidx.recyclerview.widget.RecyclerView
-import androidx.core.util.Pair
-import android.view.LayoutInflater
-import com.nanda.mystory.databinding.ItemStoryBinding
-import androidx.core.app.ActivityOptionsCompat
+import android.app.Activity
 import android.content.Intent
-import com.nanda.mystory.view.detail.DetailActivity
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.nanda.mystory.data.api.remote.response.ListStoryItem
-import android.view.ViewGroup
+import com.nanda.mystory.databinding.ItemStoryBinding
 import com.nanda.mystory.utils.toDateFormat
-import android.app.Activity
+import com.nanda.mystory.view.detail.DetailActivity
 
-
-class HomeAdapter : RecyclerView.Adapter<HomeAdapter.MyViewHolder>() {
-    private val storyList = ArrayList<ListStoryItem>()
-
-    override fun getItemCount(): Int = storyList.size
-
-    fun submitList(stories: List<ListStoryItem>) {
-        storyList.apply {
-            clear()
-            addAll(stories)
-        }
-        notifyDataSetChanged()
-    }
-
-
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val storyItem = storyList[position]
-        holder.bind(storyItem)
-    }
-
+class HomeAdapter : PagingDataAdapter<ListStoryItem, HomeAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val binding = ItemStoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ItemStoryBinding.inflate(inflater, parent, false)
         return MyViewHolder(binding)
     }
 
-    class MyViewHolder(private val binding: ItemStoryBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        getItem(position)?.let { item ->
+            holder.bind(item)
+        }
+    }
+
+    class MyViewHolder(
+        private val binding: ItemStoryBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(story: ListStoryItem) {
-            binding.tvItemName.text = story.name
-            binding.tvItemDesc.text = story.description
-            binding.tvItemDate.text = story.createdAt?.toDateFormat()
-            Glide.with(binding.root)
-                .load(story.photoUrl)
-                .into(binding.ivItemPhoto)
+            with(binding) {
+                tvItemName.text = story.name
+                tvItemDesc.text = story.description
+                tvItemDate.text = story.createdAt?.toDateFormat()
 
-            binding.cardView.setOnClickListener {
-                val intent = Intent(binding.root.context, DetailActivity::class.java).apply {
-                    putExtra(DetailActivity.EXTRA_ID, story.id)
+                Glide.with(root)
+                    .load(story.photoUrl)
+                    .into(ivItemPhoto)
+
+                cardView.setOnClickListener {
+                    val context = root.context
+                    val intent = Intent(context, DetailActivity::class.java).apply {
+                        putExtra(DetailActivity.EXTRA_ID, story.id)
+                    }
+
+                    val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        context as Activity,
+                        Pair(ivItemPhoto, "profile"),
+                        Pair(tvItemName, "name"),
+                        Pair(tvItemDesc, "description"),
+                        Pair(tvItemDate, "date")
+                    )
+
+                    context.startActivity(intent, optionsCompat.toBundle())
                 }
-
-                val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    binding.root.context as Activity,
-                    Pair(binding.ivItemPhoto, "profile"),
-                    Pair(binding.tvItemName, "name"),
-                    Pair(binding.tvItemDesc, "description"),
-                    Pair(binding.tvItemDate, "date")
-                )
-                binding.root.context.startActivity(intent, optionsCompat.toBundle())
             }
         }
     }
+
+
+
+
+
+    companion object {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListStoryItem>() {
+            override fun areItemsTheSame(oldItem: ListStoryItem, newItem: ListStoryItem): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(oldItem: ListStoryItem, newItem: ListStoryItem): Boolean {
+                return oldItem.id == newItem.id
+            }
+        }
+    }
+
+
 }

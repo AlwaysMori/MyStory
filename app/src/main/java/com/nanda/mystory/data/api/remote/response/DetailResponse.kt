@@ -8,7 +8,7 @@ data class Story(
     val name: String? = null,
 
     @field:SerializedName("lat")
-    val lat: Any? = null,
+    val lat: Float? = null,
 
     @field:SerializedName("id")
     val id: String? = null,
@@ -17,7 +17,7 @@ data class Story(
     val description: String? = null,
 
     @field:SerializedName("lon")
-    val lon: Any? = null,
+    val lon: Float? = null,
 
     @field:SerializedName("photoUrl")
     val photoUrl: String? = null,

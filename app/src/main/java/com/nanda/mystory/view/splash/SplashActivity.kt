@@ -1,6 +1,7 @@
 package com.nanda.mystory.view.splash
 
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -11,9 +12,7 @@ import com.nanda.mystory.R
 import com.nanda.mystory.view.main.MainActivity
 
 
-
-
-
+@SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,6 +1,5 @@
 package com.nanda.mystory.data.api.remote.retrofit
 
-import android.util.Log
 import com.nanda.mystory.utils.AuthPreference
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
@@ -10,7 +9,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import com.nanda.mystory.BuildConfig
-
 
 object ApiConfig {
 
@@ -24,7 +22,6 @@ object ApiConfig {
             val request = it.request()
             val token = runBlocking {
                 val tokenValue = authPreference.getData().firstOrNull()?.token ?: ""
-                Log.i("TOKENINAPI", tokenValue)
                 tokenValue
             }
             val header = request.newBuilder()

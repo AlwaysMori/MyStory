@@ -54,4 +54,29 @@
     <string name="username">Username</string>
     <string name="logo_dicoding">Logo Dicoding</string>
     <string name="email">E-mail</string>
+    <string name="maps">map</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="logo_add_map">logo add map</string>
+    <string name="confirm">Pilih Lokasi</string>
+    <string name="choose_location">Tentukan Lokasi Anda</string>
+    <string name="confirm_location">-</string>
+
+    <string name="marker" translatable="false">Marker: %1$.6f, %2$.6f</string>
+    <string name="lat_long" translatable="false">Lat: %1$.6f, Long: %2$.6f</string>
+    <string name="position">Your Position: %1$.6f, %2$.6f</string>
+    <string name="open_map">Buka peta dari sini</string>
+    <string name="no_location">Tidak ada lokasi yang ditetapkan untuk cerita ini</string>
+    <string name="posted_location">Lokasi cerita yang dikirimkan</string>
+    <string name="current_location">Lokasi Anda Saat Ini</string>
+    <string name="map_error">Tidak dapat menampilkan hasil, silakan coba lagi</string>
+    <string name="error_map_access">Tidak dapat mengakses lokasi, silakan coba lagi</string>
+    <string name="story_location">Lokasi cerita</string>
+    <string name="retry">Coba Lagi</string>
+
+    <string name="normal_type">Normal</string>
+    <string name="satellite_type">Satellite</string>
+    <string name="terrain_type">Terrain</string>
+    <string name="hybrid_type">Hybrid</string>
+    <string name="post_map">Tambahkan Lokasi</string>
+    <string name="your_location">Your Location</string>
 </resources>

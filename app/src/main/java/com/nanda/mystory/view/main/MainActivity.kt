@@ -6,10 +6,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
-import com.nanda.mystory.R
 import com.nanda.mystory.databinding.ActivityMainBinding
 import com.nanda.mystory.utils.ViewModelFactory
 import com.nanda.mystory.view.home.HomeActivity

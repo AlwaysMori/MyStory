@@ -4,21 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context=".view.story.StoryActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="0dp">
-
+        android:layout_height="wrap_content"
+        android:padding="50dp">
 
         <ImageView
             android:id="@+id/img_story_photo"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="250dp"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="16dp"
             android:contentDescription="@string/image"
             android:src="@drawable/baseline_image_24"
             app:layout_constraintEnd_toEndOf="parent"
@@ -30,7 +28,6 @@
             android:layout_width="0dp"
             android:layout_height="55dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
             android:backgroundTint="@color/light_blue"
             android:padding="8dp"
             android:text="@string/gallery"
@@ -42,7 +39,7 @@
         <com.nanda.mystory.view.customview.ButtonCustom
             android:id="@+id/btn_camera"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="55dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:padding="8dp"
@@ -57,19 +54,49 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
+            app:layout_constraintGuide_percent="0.50121653" />
 
+        <Button
+            android:id="@+id/btn_maps"
+            android:layout_width="200dp"
+            android:layout_height="55dp"
+            android:backgroundTint="@color/light_blue"
+            android:padding="16dp"
+            android:text="@string/post_map"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_camera" />
+
+        <ImageView
+            android:id="@+id/img_location_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/baseline_add_location_alt_24"
+            app:layout_constraintBottom_toBottomOf="@id/tv_lat_lng"
+            app:layout_constraintEnd_toStartOf="@id/tv_lat_lng"
+            app:layout_constraintTop_toTopOf="@id/tv_lat_lng" />
+
+        <TextView
+            android:id="@+id/tv_lat_lng"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_maps"
+            android:hint="@string/your_location"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_field"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_gallery"
-            app:layout_constraintBottom_toTopOf="@+id/button_add">
-
+            app:layout_constraintTop_toBottomOf="@id/tv_lat_lng">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/ed_add_description"
@@ -78,41 +105,39 @@
                 android:gravity="start|top"
                 android:hint="@string/story"
                 android:inputType="textMultiLine"
-                android:minLines="5"
                 android:maxLines="15"
-                android:scrollbars="vertical"
-                android:scrollbarStyle="insideOverlay"
-                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:minLines="5"
                 android:overScrollMode="ifContentScrolls"
                 android:padding="8dp"
-                />
-
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbarStyle="insideOverlay"
+                android:scrollbars="vertical" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-
         <Button
             android:id="@+id/button_add"
-            android:transitionName="submit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/submit"
-            android:backgroundTint="@color/light_blue"
+            android:layout_width="310dp"
+            android:layout_height="50dp"
             android:layout_marginVertical="16dp"
-            android:layout_marginHorizontal="16dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:backgroundTint="@color/light_blue"
+            android:text="@string/submit"
+            android:transitionName="submit"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_field"
+            app:layout_constraintVertical_bias="0.0" />
 
         <ProgressBar
             android:id="@+id/progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="invisible"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

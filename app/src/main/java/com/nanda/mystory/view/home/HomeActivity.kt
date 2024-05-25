@@ -4,12 +4,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import com.nanda.mystory.data.model.DataModel
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -19,99 +15,63 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nanda.mystory.R
-import com.nanda.mystory.data.api.remote.response.StoryResponse
 import com.nanda.mystory.databinding.ActivityHomeBinding
-import com.nanda.mystory.utils.Result
 import com.nanda.mystory.utils.ViewModelFactory
 import com.nanda.mystory.view.adapter.HomeAdapter
+import com.nanda.mystory.view.adapter.LoadingStateAdapter
+import com.nanda.mystory.view.map.MapsActivity
 import com.nanda.mystory.view.setting.SettingActivity
 import com.nanda.mystory.view.story.StoryActivity
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
-    private lateinit var adapter: HomeAdapter
+
     private val viewModelFactory = ViewModelFactory.getInstance(this)
     private val viewModel: HomeViewModel by viewModels { viewModelFactory }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        binding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
         supportActionBar?.apply {
             title = null
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
-        binding = ActivityHomeBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        enableEdgeToEdge()
 
-        initializeViews()
-        observeViewModel()
+        val adapter = HomeAdapter()
+        val layoutManager = LinearLayoutManager(this)
+        binding.rvStory.adapter = adapter.withLoadStateFooter(
+            footer = LoadingStateAdapter {
+                adapter.retry()
+            }
+        )
+        binding.rvStory.layoutManager = layoutManager
+        viewModel.stories.observe(this) {
+            adapter.submitData(lifecycle, it)
+        }
+
+
 
         binding.btnStory.setOnClickListener {
-            navigateToStoryActivity()
-        }
-    }
-
-    private fun initializeViews() {
-        adapter = HomeAdapter()
-        binding.rvStory.adapter = adapter
-        binding.rvStory.layoutManager = LinearLayoutManager(this)
-    }
-
-    private fun observeViewModel() {
-        viewModel.getStories().observe(this) { result ->
-            handleStoriesResult(result)
-        }
-
-        viewModel.getLoginData().observe(this) { loginData ->
-            handleLoginData(loginData)
-        }
-    }
-
-    private fun handleStoriesResult(result: Result<StoryResponse>) {
-        when (result) {
-            is Result.Failure -> {
-                showLoading(false)
-                Toast.makeText(
+            val intent = Intent(this@HomeActivity, StoryActivity::class.java)
+            val optionsCompact: ActivityOptionsCompat =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(
                     this@HomeActivity,
-                    getString(R.string.error_get_story),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-
-            Result.Loading -> {
-                showLoading(false)
-            }
-
-            is Result.Success -> {
-                showLoading(false)
-                result.data.listStory?.let { stories ->
-                    adapter.submitList(stories.filterNotNull())
-                }
-            }
+                    Pair(binding.btnStory, "text"),
+                    Pair(binding.imgLogo, "logo")
+                )
+            startActivity(intent, optionsCompact.toBundle())
         }
-    }
 
-
-    private fun handleLoginData(loginData: DataModel) {
-        val token = loginData.token
-        val loginState = loginData.isLogin
-        Log.d("Token_Home", token.toString())
-        Log.d("Login_Home", loginState.toString())
-    }
-
-    private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-    }
-
-    private fun navigateToStoryActivity() {
-        val intent = Intent(this@HomeActivity, StoryActivity::class.java)
-        val optionsCompact: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-            this@HomeActivity,
-            Pair(binding.btnStory, "text"),
-            Pair(binding.imgLogo, "logo")
-        )
-        startActivity(intent, optionsCompact.toBundle())
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -121,20 +81,28 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.btn_setting) {
-            navigateToSettingActivity()
+            val intent = Intent(this, SettingActivity::class.java)
+            val optionsCompat: ActivityOptionsCompat =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    this@HomeActivity,
+                    Pair(binding.btnStory, "name"),
+                    Pair(binding.imgAvatar, "avatar"),
+                    Pair(binding.imgLogo, "logo")
+                )
+            startActivity(intent, optionsCompat.toBundle())
+        }
+        if (item.itemId == R.id.btn_map) {
+            val intent = Intent(this, MapsActivity::class.java)
+            val mapString = "mapString"
+            intent.putExtra(EXTRA_MAP, mapString)
+            val transition = ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle()
+            startActivity(intent, transition)
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun navigateToSettingActivity() {
-        val intent = Intent(this, SettingActivity::class.java)
-        val optionsCompat: ActivityOptionsCompat =
-            ActivityOptionsCompat.makeSceneTransitionAnimation(
-                this@HomeActivity,
-                Pair(binding.btnStory, "name"),
-                Pair(binding.imgLogo, "logo"),
-                Pair(binding.imgAvatar, "avatar")
-            )
-        startActivity(intent, optionsCompat.toBundle())
+    companion object {
+        const val EXTRA_MAP = "extra_map"
     }
+
 }

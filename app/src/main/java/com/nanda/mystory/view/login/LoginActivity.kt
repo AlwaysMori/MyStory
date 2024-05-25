@@ -13,11 +13,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.nanda.mystory.R
 import com.nanda.mystory.data.model.DataModel
-import com.nanda.mystory.databinding.ActivityCameraBinding
 import com.nanda.mystory.databinding.ActivityLoginBinding
 import com.nanda.mystory.utils.Result
 import com.nanda.mystory.utils.ViewModelFactory

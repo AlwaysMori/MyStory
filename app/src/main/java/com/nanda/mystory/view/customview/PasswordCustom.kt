@@ -1,15 +1,14 @@
 package com.nanda.mystory.view.customview
 
-import android.text.Editable
-import android.view.View
-import com.nanda.mystory.R
-import android.view.MotionEvent
 import android.content.Context
-import android.util.AttributeSet
+import android.text.Editable
 import android.text.TextWatcher
+import android.util.AttributeSet
+import android.view.MotionEvent
+import android.view.View
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
-
+import com.nanda.mystory.R
 
 class PasswordCustom @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
